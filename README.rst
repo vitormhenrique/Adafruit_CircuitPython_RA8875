@@ -13,7 +13,11 @@ Introduction
     :target: https://travis-ci.com/melissagirl/Adafruit_CircuitPython_RA8875
     :alt: Build Status
 
-.. todo:: Describe what the library does.
+This is a full featured CircuitPython Library for the RA8875 that included all of the hardware
+accelerated drawing functions as the original Arduino library. A lot of the functionality has
+been streamlined with a focus on ease of use that is still flexible enough to make full use of
+the hardware. For instace, Graphics and Text mode switching is now automatic and handled in the
+background.
 
 Dependencies
 =============
@@ -29,7 +33,8 @@ This is easily achieved by downloading
 Usage Example
 =============
 
-.. todo:: Add a quick, simple example. It and other examples should live in the examples folder and be included in docs/examples.rst.
+See examples/ra8875_simpletest.py and examples/ra8875_bmptest.py for examples of the module's usage. When 
+running the bmptest, be sure to upload the blinka.bmp image to the root folder as well.
 
 Contributing
 ============
