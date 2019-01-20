@@ -45,7 +45,6 @@ Implementation Notes
 
 # imports
 import time
-from digitalio import Direction
 import micropython_ra8875.registers as reg
 
 try:
@@ -267,7 +266,7 @@ class RA8875_Device(object):
     def touch_init(self, tpin=None, enable=True):
         """Initialize the Touchscreen"""
         if tpin is not None:
-            tpin.direction = Direction.INPUT
+            tpin.init(tpin.IN)
         self._tpin = tpin
         self.write_reg(reg.INTC2, reg.INTC2_TP)
         self.touch_enable(enable)
@@ -322,11 +321,9 @@ class RA8875Display(RA8875_Device):
     """Set Initial Variables"""
     # pylint: disable-msg=invalid-name,too-many-arguments
 
-    def __init__(self, spi, cs, rst=None, width=800, height=480,
-                 baudrate=6000000, polarity=0, phase=0):
+    def __init__(self, spi, cs, rst=None, width=800, height=480):
         self._txt_scale = 0
-        super(RA8875Display, self).__init__(spi, cs, rst, width, height,
-                                            baudrate, polarity, phase)
+        super(RA8875Display, self).__init__(spi, cs, rst, width, height)
     # pylint: enable-msg=invalid-name,too-many-arguments
 
     # pylint: disable-msg=invalid-name
