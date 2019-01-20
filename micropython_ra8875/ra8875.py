@@ -46,8 +46,7 @@ Implementation Notes
 # imports
 import time
 from digitalio import Direction
-import adafruit_bus_device.spi_device as spi_device
-import adafruit_ra8875.registers as reg
+import micropython_ra8875.registers as reg
 
 try:
     import struct
