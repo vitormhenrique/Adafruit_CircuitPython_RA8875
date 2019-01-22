@@ -83,7 +83,6 @@ spi = busio.SPI(clock=board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 # Create and setup the RA8875 display:
 display = ra8875.RA8875(spi, cs=cs_pin, rst=rst_pin, baudrate=BAUDRATE)
 display.init()
-display.fill(WHITE)
 
 display.fill(BLACK)
 
