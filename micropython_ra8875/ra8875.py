@@ -67,11 +67,14 @@ def color565(r, g=0, b=0):
     return (r & 0xf8) << 8 | (g & 0xfc) << 3 | b >> 3
 # pylint: enable-msg=invalid-name
 
+
 class RA8875CursorType():
+    """Class with fixed values of different cursor types"""
     NOCURSOR = 0
     IBEAM = 1
     UNDER = 2
     BLOCK = 3
+
 
 class RA8875_Device(object):
     """Set Initial Variables"""
@@ -452,46 +455,59 @@ class RA8875Display(RA8875_Device):
         self.write_reg(reg.RA8875_VOFS1, (y >> 8))
     # pylint: enable-msg=invalid-name,too-many-arguments
 
-
     def show_cursor(self, cursor_type, blink):
-        cW = 0
-        cH = 0
-        MWCR0_Reg = 0
+        """
+        Show cursor on text mode
+        :param RA8875CursorType cursor_type: Type of cursor that should be displayed
+        :param bool blink: if the cursor should blink or not
+        """
+        cur_h = 0
+        cur_v = 0
+        cr0_reg = 0
 
         if cursor_type == RA8875CursorType.NOCURSOR:
-            MWCR0_Reg &= ~(1 << 6)
+            cr0_reg &= ~(1 << 6)
         else:
-            MWCR0_Reg |= (1 << 6)
+            cr0_reg |= (1 << 6)
 
-        if(blink):
-            MWCR0_Reg |= 0x20
+        if blink:
+            cr0_reg |= 0x20
 
-        self.write_reg(reg.MWCR0, MWCR0_Reg)
+        self.write_reg(cr0_reg.MWCR0, cr0_reg)
 
         if cursor_type == RA8875CursorType.IBEAM:
-            cW = 0x01
-            cH = 0x1F
+            cur_h = 0x01
+            cur_v = 0x1F
         elif cursor_type == RA8875CursorType.UNDER:
-            cW = 0x07
-            cH = 0x01
+            cur_h = 0x07
+            cur_v = 0x01
         elif cursor_type == RA8875CursorType.BLOCK:
-            cW = 0x07
-            cH = 0x1F
+            cur_h = 0x07
+            cur_v = 0x1F
 
-        self.write_reg(reg.RA8875_CURHS, cW)
-        self.write_reg(reg.RA8875_CURVS, cH)
+        self.write_reg(cr0_reg.RA8875_CURHS, cur_h)
+        self.write_reg(cr0_reg.RA8875_CURVS, cur_v)
 
     def set_cursor_blink_rate(self, rate):
+        """
+        Set the blink rate of the cursor
+        """
         self.write_reg(reg.RA8875_BTCR, rate)
 
     def get_cursor(self):
-        t1 = self.read_reg(reg.RA8875_F_CURXL)
-        t2 = self.read_reg(reg.RA8875_F_CURXH)
-        t3 = self.read_reg(reg.RA8875_F_CURYL)
-        t4 = self.read_reg(reg.RA8875_F_CURYH)
-        x = (t2 << 8) | (t1 & 0xFF)
-        y = (t4 << 8) | (t3 & 0xFF)
+        """
+        Get current cursor positon form the display register
+        :return: Return a tuple of int with the x and y position
+        :rtype: (int, int)
+        """
+        _t1 = self.read_reg(reg.RA8875_F_CURXL)
+        _t2 = self.read_reg(reg.RA8875_F_CURXH)
+        _t3 = self.read_reg(reg.RA8875_F_CURYL)
+        _t4 = self.read_reg(reg.RA8875_F_CURYH)
+        x = (_t2 << 8) | (_t1 & 0xFF)
+        y = (_t4 << 8) | (_t3 & 0xFF)
         return x, y
+
 
 class RA8875(RA8875Display):
     """Set Initial Variables"""
