@@ -331,6 +331,7 @@ class RA8875Display(RA8875_Device):
 
     def __init__(self, spi, cs, rst=None, width=800, height=480):
         self._txt_scale = 0
+        self._line_space = 0
         super(RA8875Display, self).__init__(spi, cs, rst, width, height)
     # pylint: enable-msg=invalid-name,too-many-arguments
 
@@ -361,6 +362,18 @@ class RA8875Display(RA8875_Device):
         self._txt_mode()
         self.write_cmd(reg.MRWC)
         for char in string:
+            self.txt_write_char(char)
+
+    def txt_write_char(self, char):
+        """Helper funciton to write char into the screen, to handle special chrs"""
+        if char == '\n':
+            cursor_x, cursor_y = self.get_cursor()
+            cursor_y += 16 + (16 * (self._txt_scale)) + self._line_space
+            cursor_x = 0
+            self.txt_set_cursor(cursor_x, cursor_y)
+            self.write_cmd(reg.MRWC)
+
+        else:
             self.write_data(char, True)
             if self._txt_scale > 0:
                 time.sleep(0.001)
@@ -473,7 +486,7 @@ class RA8875Display(RA8875_Device):
         if blink:
             cr0_reg |= 0x20
 
-        self.write_reg(cr0_reg.MWCR0, cr0_reg)
+        self.write_reg(reg.MWCR0, cr0_reg)
 
         if cursor_type == RA8875CursorType.IBEAM:
             cur_h = 0x01
@@ -485,8 +498,8 @@ class RA8875Display(RA8875_Device):
             cur_h = 0x07
             cur_v = 0x1F
 
-        self.write_reg(cr0_reg.RA8875_CURHS, cur_h)
-        self.write_reg(cr0_reg.RA8875_CURVS, cur_v)
+        self.write_reg(reg.RA8875_CURHS, cur_h)
+        self.write_reg(reg.RA8875_CURVS, cur_v)
 
     def set_cursor_blink_rate(self, rate):
         """
@@ -508,6 +521,25 @@ class RA8875Display(RA8875_Device):
         y = (_t4 << 8) | (_t3 & 0xFF)
         return x, y
 
+    def set_font_spacing(self, space):
+        """
+        Set the space between the chars
+        :param int space: value between 0 and 63
+        """
+        if space > 63: space = 63
+        register = 0
+        register &= 0xC0
+        register |= space & 0x3F
+        self.write_reg(reg.RA8875_FWTSET, register)
+
+    def set_font_interline_spacing(self, space):
+        """
+        Set the space between the lines
+        :param int space: value between 0 and 63
+        """
+        if space > 63: space = 63
+        self._line_space = space
+        self.write_reg(reg.RA8875_FLDR, space)
 
 class RA8875(RA8875Display):
     """Set Initial Variables"""

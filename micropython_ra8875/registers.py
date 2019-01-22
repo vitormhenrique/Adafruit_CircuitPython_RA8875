@@ -236,3 +236,6 @@ RA8875_F_CURXL = 0x2A   #Font Write Cursor Horizontal Position Register 0
 RA8875_F_CURXH = 0x2B   #Font Write Cursor Horizontal Position Register 1
 RA8875_F_CURYL = 0x2C   #Font Write Cursor Vertical Position Register 0
 RA8875_F_CURYH = 0x2D   #Font Write Cursor Vertical Position Register 1
+RA8875_FWTSET = 0x2E    #Font Write Type Setting Register
+RA8875_FLDR = 0x29      #Font Line Distance Setting Register
+
