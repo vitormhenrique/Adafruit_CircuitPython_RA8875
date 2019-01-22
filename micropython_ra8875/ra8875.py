@@ -421,6 +421,31 @@ class RA8875Display(RA8875_Device):
         self.write_reg(reg.VEAW0 + 1, (y + height) >> 8)
     # pylint: enable-msg=invalid-name,too-many-arguments
 
+    # pylint: disable-msg=invalid-name,too-many-arguments
+    def set_scroll_window(self, scroll_xl, scroll_xr, scroll_yt, scroll_yb):
+        """Set an Scrolling Window"""
+        self.write_reg(reg.RA8875_HSSW0, (scroll_xl & 0xFF))
+        self.write_reg(reg.RA8875_HSSW0+1, (scroll_xl >> 8))
+
+        self.write_reg(reg.RA8875_HESW0, (scroll_xr & 0xFF))
+        self.write_reg(reg.RA8875_HESW0+1, (scroll_xr >> 8))
+
+        self.write_reg(reg.RA8875_VSSW0, (scroll_yt & 0xFF))
+        self.write_reg(reg.RA8875_VSSW0+1, (scroll_yt >> 8))
+
+        self.write_reg(reg.RA8875_VESW0, (scroll_yb & 0xFF))
+        self.write_reg(reg.RA8875_VESW0+1, (scroll_yb >> 8))
+    # pylint: enable-msg=invalid-name,too-many-arguments
+
+    # pylint: disable-msg=invalid-name,too-many-arguments
+    def scroll(self, x, y):
+        """Set an Scrolling Window"""
+        self.write_reg(reg.RA8875_HOFS0, (x & 0xFF))
+        self.write_reg(reg.RA8875_HOFS1, (x >> 8))
+
+        self.write_reg(reg.RA8875_VOFS0, (y & 0xFF))
+        self.write_reg(reg.RA8875_VOFS1, (y >> 8))
+    # pylint: enable-msg=invalid-name,too-many-arguments
 
 class RA8875(RA8875Display):
     """Set Initial Variables"""

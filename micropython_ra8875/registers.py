@@ -220,3 +220,21 @@ INTC2_KEY = 0x10
 INTC2_DMA = 0x08
 INTC2_TP = 0x04
 INTC2_BTE = 0x02
+
+# Horizontal Start Point 0 of Scroll Window
+RA8875_HSSW0 = 0x38 
+# Vertical 	 Start Point 0 of Scroll Window
+RA8875_VSSW0 = 0x3A
+# Horizontal End   Point 0 of Scroll Window
+RA8875_HESW0 = 0x3C
+# Vertical 	 End   Point 0 of Scroll Window
+RA8875_VESW0 = 0x3E
+
+# Horizontal Scroll Offset Register 0
+RA8875_HOFS0 = 0x24
+# Horizontal Scroll Offset Register 1
+RA8875_HOFS1 = 0x25
+# Vertical Scroll Offset Register 0
+RA8875_VOFS0 = 0x26
+# Vertical Scroll Offset Register 1
+RA8875_VOFS1 = 0x27
