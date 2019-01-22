@@ -294,7 +294,7 @@ class RA8875_Device(object):
         """Check if the Screen is currently being touched"""
         if self._tpin is not None:
             self._gfx_mode()  # Hack that seems to work
-            if self._tpin.value:
+            if self._tpin.value():
                 return False
         istouched = True if self.read_reg(reg.INTC2) & reg.INTC2_TP else False
         return istouched
