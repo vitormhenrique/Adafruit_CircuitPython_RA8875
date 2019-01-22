@@ -67,6 +67,11 @@ def color565(r, g=0, b=0):
     return (r & 0xf8) << 8 | (g & 0xfc) << 3 | b >> 3
 # pylint: enable-msg=invalid-name
 
+class RA8875CursorType():
+    NOCURSOR = 0
+    IBEAM = 1
+    UNDER = 2
+    BLOCK = 3
 
 class RA8875_Device(object):
     """Set Initial Variables"""
@@ -446,6 +451,47 @@ class RA8875Display(RA8875_Device):
         self.write_reg(reg.RA8875_VOFS0, (y & 0xFF))
         self.write_reg(reg.RA8875_VOFS1, (y >> 8))
     # pylint: enable-msg=invalid-name,too-many-arguments
+
+
+    def show_cursor(self, cursor_type, blink):
+        cW = 0
+        cH = 0
+        MWCR0_Reg = 0
+
+        if cursor_type == RA8875CursorType.NOCURSOR:
+            MWCR0_Reg &= ~(1 << 6)
+        else:
+            MWCR0_Reg |= (1 << 6)
+
+        if(blink):
+            MWCR0_Reg |= 0x20
+
+        self.write_reg(reg.MWCR0, MWCR0_Reg)
+
+        if cursor_type == RA8875CursorType.IBEAM:
+            cW = 0x01
+            cH = 0x1F
+        elif cursor_type == RA8875CursorType.UNDER:
+            cW = 0x07
+            cH = 0x01
+        elif cursor_type == RA8875CursorType.BLOCK:
+            cW = 0x07
+            cH = 0x1F
+
+        self.write_reg(reg.RA8875_CURHS, cW)
+        self.write_reg(reg.RA8875_CURVS, cH)
+
+    def set_cursor_blink_rate(self, rate):
+        self.write_reg(reg.RA8875_BTCR, rate)
+
+    def get_cursor(self):
+        t1 = self.read_reg(reg.RA8875_F_CURXL)
+        t2 = self.read_reg(reg.RA8875_F_CURXH)
+        t3 = self.read_reg(reg.RA8875_F_CURYL)
+        t4 = self.read_reg(reg.RA8875_F_CURYH)
+        x = (t2 << 8) | (t1 & 0xFF)
+        y = (t4 << 8) | (t3 & 0xFF)
+        return x, y
 
 class RA8875(RA8875Display):
     """Set Initial Variables"""

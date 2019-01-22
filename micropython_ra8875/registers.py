@@ -221,20 +221,18 @@ INTC2_DMA = 0x08
 INTC2_TP = 0x04
 INTC2_BTE = 0x02
 
-# Horizontal Start Point 0 of Scroll Window
-RA8875_HSSW0 = 0x38 
-# Vertical 	 Start Point 0 of Scroll Window
-RA8875_VSSW0 = 0x3A
-# Horizontal End   Point 0 of Scroll Window
-RA8875_HESW0 = 0x3C
-# Vertical 	 End   Point 0 of Scroll Window
-RA8875_VESW0 = 0x3E
-
-# Horizontal Scroll Offset Register 0
-RA8875_HOFS0 = 0x24
-# Horizontal Scroll Offset Register 1
-RA8875_HOFS1 = 0x25
-# Vertical Scroll Offset Register 0
-RA8875_VOFS0 = 0x26
-# Vertical Scroll Offset Register 1
-RA8875_VOFS1 = 0x27
+RA8875_HSSW0 = 0x38     # Horizontal Start Point 0 of Scroll Window
+RA8875_VSSW0 = 0x3A     # Vertical 	 Start Point 0 of Scroll Window
+RA8875_HESW0 = 0x3C     # Horizontal End   Point 0 of Scroll Window
+RA8875_VESW0 = 0x3E     # Vertical 	 End   Point 0 of Scroll Window
+RA8875_HOFS0 = 0x24     # Horizontal Scroll Offset Register 0
+RA8875_HOFS1 = 0x25     # Horizontal Scroll Offset Register 1
+RA8875_VOFS0 = 0x26     # Vertical Scroll Offset Register 0
+RA8875_VOFS1 = 0x27     # Vertical Scroll Offset Register 1
+RA8875_CURHS = 0x4E     # Font Write Cursor and Memory Write Cursor Horizontal Size Register
+RA8875_CURVS = 0x4F     # Font Write Cursor Vertical Size Register
+RA8875_BTCR = 0x44      # Blink Time Control Register
+RA8875_F_CURXL = 0x2A   #Font Write Cursor Horizontal Position Register 0
+RA8875_F_CURXH = 0x2B   #Font Write Cursor Horizontal Position Register 1
+RA8875_F_CURYL = 0x2C   #Font Write Cursor Vertical Position Register 0
+RA8875_F_CURYH = 0x2D   #Font Write Cursor Vertical Position Register 1

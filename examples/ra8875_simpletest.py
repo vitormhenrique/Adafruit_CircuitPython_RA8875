@@ -1,11 +1,9 @@
 # Quick test of RA8875 with Feather M4
 import time
-import busio
-import digitalio
-import board
-
-import adafruit_ra8875.ra8875 as ra8875
-from adafruit_ra8875.ra8875 import color565
+import machine
+import micropython_ra8875.registers as reg
+import micropython_ra8875.ra8875 as ra8875
+from micropython_ra8875.ra8875 import color565
 
 BLACK = color565(0, 0, 0)
 RED = color565(255, 0, 0)
@@ -16,19 +14,10 @@ CYAN = color565(0, 255, 255)
 MAGENTA = color565(255, 0, 255)
 WHITE = color565(255, 255, 255)
 
-# Configuration for CS and RST pins:
-cs_pin = digitalio.DigitalInOut(board.D9)
-rst_pin = digitalio.DigitalInOut(board.D10)
-int_pin = digitalio.DigitalInOut(board.D11)
+int_pin = machine.Pin('X3')
 
-# Config for display baudrate (default max is 4mhz):
-BAUDRATE = 6000000
-
-# Setup SPI bus using hardware SPI:
-spi = busio.SPI(clock=board.SCK, MOSI=board.MOSI, MISO=board.MISO)
-
-# Create and setup the RA8875 display:
-display = ra8875.RA8875(spi, cs=cs_pin, rst=rst_pin, baudrate=BAUDRATE)
+spi = machine.SPI(1, baudrate=6000000, polarity=0, phase=0)
+display = ra8875.RA8875(spi, cs=machine.Pin('X5'), rst=machine.Pin('X4'))
 display.init()
 
 display.fill(RED)
@@ -75,7 +64,8 @@ y_scale = 1024 / display.height
 while True:
     if display.touched():
         coords = display.touch_read()
-        display.fill_circle(int(coords[0]/x_scale), int(coords[1]/y_scale), 4, MAGENTA)
+        display.fill_circle(
+            int(coords[0]/x_scale), int(coords[1]/y_scale), 4, MAGENTA)
         display.txt_color(WHITE, BLACK)
         display.txt_set_cursor(240, 240)
         display.txt_size(2)
