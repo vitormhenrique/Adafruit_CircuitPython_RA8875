@@ -15,28 +15,6 @@ WHITE = color565(255, 255, 255)
 
 BAUDRATE = 6000000
 
-
-def test_fill_screen(display):
-    start = time.ticks_us()
-    display.fill(BLACK)
-    time.sleep(0.2)
-    display.fill(RED)
-    time.sleep(0.2)
-    display.fill(BLUE)
-    time.sleep(0.2)
-    display.fill(GREEN)
-    time.sleep(0.2)
-    display.fill(YELLOW)
-    time.sleep(0.2)
-    display.fill(CYAN)
-    time.sleep(0.2)
-    display.fill(MAGENTA)
-    time.sleep(0.2)
-    display.fill(WHITE)
-    time.sleep(0.2)
-    print("test fill in {} microseconds.".format(time.ticks_us() - start))
-
-
 def test_lines(display, color):
     display.fill(BLACK)
     w = display.width
@@ -90,16 +68,21 @@ def test_lines(display, color):
     display.fill(BLACK)
 
 
-spi = machine.SPI(1, baudrate=BAUDRATE, polarity=0, phase=0)
+# Configuration for CS and RST pins:
+cs_pin = digitalio.DigitalInOut(board.D9)
+rst_pin = digitalio.DigitalInOut(board.D10)
+
+# Config for display baudrate (default max is 6mhz):
+BAUDRATE = 6000000
+
+# Setup SPI bus using hardware SPI:
+spi = busio.SPI(clock=board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 
 # Create and setup the RA8875 display:
-display = ra8875.RA8875(spi, cs=machine.Pin('X5'), rst=machine.Pin('X4'))
+display = ra8875.RA8875(spi, cs=cs_pin, rst=rst_pin, baudrate=BAUDRATE)
 display.init()
+display.fill(WHITE)
 
 display.fill(BLACK)
 
-# test_fill_screen(display)
-
 test_lines(display, WHITE)
-
-# print(display.width)
